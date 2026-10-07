@@ -11,7 +11,8 @@
 <main class="reviewWrap">
   <div class="topbar">
     <a class="backLink" href="#" id="homeLink">🧭 期中考複習</a>
-    <div class="profileBar"><div id="studentTag" class="studentTag">尚未設定學習者資料</div><button id="editProfileBtn" class="softBtn" type="button">修改</button></div>
+    <div class="profileBar"><div id="studentTag" class="studentTag">尚未設定學習者資料</div><button id="editProfileBtn" class="softBtn" type="button">帳號</button>
+<a class="softBtn" href="teacher.html" style="text-decoration:none;display:inline-flex;align-items:center">教師端</a></div>
   </div>
   <section class="hero">
     <div class="heroIcon">🧭</div>
@@ -71,7 +72,7 @@
   <dialog id="profileDialog" class="profileDialog">
     <div class="resultIcon">🪪</div>
     <h2>設定學習者資料</h2>
-    <p>只會儲存在這台瀏覽器，用來標示你的複習紀錄。</p>
+    <p>使用班級、座號與學習密碼登入。若你之前已建立 Python 學習帳號，可直接使用同一組密碼。</p>
     <label>班級
       <input id="profileClass" inputmode="numeric" maxlength="3" placeholder="例如 902">
     </label>
@@ -81,13 +82,19 @@
     <label>姓名
       <input id="profileName" maxlength="20" placeholder="請輸入姓名">
     </label>
+    <label>學習密碼
+      <input id="profilePassword" type="password" minlength="6" placeholder="至少 6 個字元">
+    </label>
     <div id="profileError" class="profileError"></div>
     <div class="dialogActions">
-      <button id="saveProfileBtn" class="primaryBtn" type="button">開始複習</button>
+      <button id="logoutBtn" class="softBtn hidden" type="button">登出</button>
+      <button id="saveProfileBtn" class="primaryBtn" type="button">登入／建立帳號</button>
     </div>
   </dialog>
 
 </main>
+<script src="firebase-config.js"></script>
+<script src="student-db.js"></script>
 <script src="review.js"></script>
 <script>MIDTERM.init();</script>
 </body>

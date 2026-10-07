@@ -1,0 +1,77 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>期中考複習關卡｜教師端</title>
+<style>
+*{box-sizing:border-box}body{margin:0;font-family:system-ui,-apple-system,"Noto Sans TC",sans-serif;background:#f5f7fb;color:#25324a}
+header{background:white;border-bottom:1px solid #e5e9ef;padding:15px max(18px,calc((100vw - 1180px)/2));display:flex;justify-content:space-between;gap:12px;align-items:center}
+main{max-width:1180px;margin:auto;padding:20px}.card{background:white;border-radius:18px;padding:20px;border:1px solid #e5e9ef;margin-bottom:16px}
+.login{max-width:480px;margin:50px auto}.field{display:block;margin:12px 0;font-weight:800}.field input{width:100%;padding:11px;border:1px solid #ccd4de;border-radius:10px;font-size:16px}
+button,select{font:inherit}button{border:0;border-radius:11px;padding:10px 14px;font-weight:900;cursor:pointer}.primary{background:#485975;color:white}.soft{background:#edf0f5;color:#435069}.export{background:#e7f5eb;color:#256b3a}.danger{background:#fdebec;color:#a12f35}
+.toolbar{display:flex;gap:10px;flex-wrap:wrap;align-items:center}.toolbar select{padding:9px 12px;border:1px solid #ccd4de;border-radius:10px}
+.summary{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin:14px 0}.metric{background:#f7f8fb;border-radius:14px;padding:14px}.metric b{display:block;font-size:25px}
+.tableWrap{overflow:auto;max-height:65vh}table{width:100%;border-collapse:collapse}th,td{padding:10px;border-bottom:1px solid #e8ebef;text-align:left;font-size:14px;white-space:nowrap}th{background:#f7f8fb;position:sticky;top:0}
+.badge{display:inline-block;padding:4px 8px;border-radius:999px;background:#eef1f5}.done{background:#e4f7eb;color:#267148}.warn{background:#fff5df;color:#8a5b14}.hidden{display:none!important}.error{color:#b42318;font-weight:800}.status{color:#667085;font-size:13px}
+dialog{width:min(760px,calc(100% - 28px));border:0;border-radius:18px;padding:0;box-shadow:0 20px 60px #21304735}dialog::backdrop{background:#22314a80}
+.dHead{padding:18px 20px;border-bottom:1px solid #e8ebef}.dBody{padding:18px 20px}.dFoot{padding:0 20px 18px;display:flex;justify-content:flex-end;gap:10px}
+.stationGrid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}.stationBox{border:1px solid #e3e7ed;border-radius:14px;padding:12px}.stationBox h4{margin:0 0 8px}.muted{color:#667085}
+@media(max-width:720px){.summary,.stationGrid{grid-template-columns:1fr 1fr}}
+</style>
+<script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+<script src="firebase-config.js"></script>
+</head>
+<body>
+<header><b>🧭 期中考複習關卡｜教師端</b><a href="index.html">學生端</a></header>
+<main>
+<section id="loginCard" class="card login">
+  <h2>教師登入</h2>
+  <p class="muted">沿用 course115-python Firebase 的教師帳號與班級授權。</p>
+  <label class="field">Email<input id="email" type="email"></label>
+  <label class="field">密碼<input id="password" type="password"></label>
+  <button id="loginBtn" class="primary">登入</button>
+  <p id="loginError" class="error"></p>
+</section>
+
+<section id="app" class="hidden">
+  <div class="card">
+    <div class="toolbar">
+      <b id="teacherName">教師</b>
+      <select id="classFilter"></select>
+      <button id="refreshBtn" class="soft">重新整理</button>
+      <button id="exportBtn" class="export">匯出 Excel</button>
+      <button id="logoutBtn" class="soft">登出</button>
+    </div>
+    <div class="summary">
+      <div class="metric"><span>學生人數</span><b id="mStudents">0</b></div>
+      <div class="metric"><span>四站全完成</span><b id="mDone">0</b></div>
+      <div class="metric"><span>平均完成站數</span><b id="mStations">0</b></div>
+      <div class="metric"><span>累計錯題次數</span><b id="mWrong">0</b></div>
+    </div>
+    <div class="status" id="status"></div>
+  </div>
+
+  <div class="card">
+    <div class="tableWrap">
+      <table>
+        <thead><tr>
+          <th>班級</th><th>座號</th><th>姓名</th><th>R1</th><th>R2</th><th>R3</th><th>R4</th>
+          <th>完成站數</th><th>累計錯題</th><th>弱點主題</th><th>更新時間</th><th>維護</th>
+        </tr></thead>
+        <tbody id="rows"></tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<dialog id="detailDialog">
+  <div class="dHead"><h3 id="detailTitle" style="margin:0">學生明細</h3></div>
+  <div class="dBody">
+    <div id="stationDetail" class="stationGrid"></div>
+    <p><b>弱點主題：</b><span id="detailWeak"></span></p>
+  </div>
+  <div class="dFoot"><button class="soft" onclick="detailDialog.close()">關閉</button></div>
+</dialog>
+</main>
+<script src="teacher.js"></script>
+</body></html>
